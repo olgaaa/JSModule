@@ -149,12 +149,15 @@ li {
 .container {
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .timeslots {
   display: inline-block;
-  width: 32px;
-  text-align: center;
+  width: 240px;
+  text-align: left;
+  margin: 0 30px;
+  position: relative;
 }
 
 .timeslot {
@@ -171,14 +174,9 @@ li {
   font-size: 12px;
 }
 
-.tasks {
-  width: 200px;
-  margin: 0 40px 0 20px;
-}
-
 .task {
   font-size: 14px;
-  position: relative;
+  position: absolute;
   background-color: #e2ecf5;
   border-left: 2px solid #6e9ecf;
   padding: 5px;
@@ -187,6 +185,10 @@ li {
   text-overflow: ellipsis;
   height: 60px;
   width: 100%;
-  left: 0px;
+  left: 40px;
   top: 0px;
+}
+
+.task:hover {
+  background-color: #c5def6;
 }

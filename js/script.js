@@ -75,71 +75,162 @@ renderTime(afternoonTimeContainer, 1, 241);
 const morningTasks = document.getElementById('morningTasks');
 const afternoonTasks = document.getElementById('afternoonTasks');
 
-let id = 1;
+class Task {
+  constructor(task) {
+    this.start = task.start;
+    this.duration = task.duration;
+    this.title = task.title;
+    this.end = task.start + task.duration;
+    this.width = 200;
+    this.height = this.duration * 2;
+    this.left = 40;
+    // this.id = id++;
+  }
+  // static id = 1;
+}
 
-const taskList = tasks.map((task) => {
-  task.end = task.start + task.duration;
-  task.left = 0;
-  task.width = 200;
-  task.id = id++;
-  return task;
-});
+let myTask = new Task(tasks[1]);
+console.log(myTask);
 
-console.log(taskList);
+class TaskList {
+  constructor(list) {
+    list = list.sort(function (a, b) {
+      return a.start - b.start;
+    });
+    this.tasks = list.map((task) => new Task(task));
+    this.setTop();
+    this.setWidth();
+  }
+
+  setTop() {
+    this.tasks.forEach((t) => {
+      if (Number(t.start) < 300) {
+        t.top = t.start * 2;
+      } else t.top = (t.start - 300) * 2;
+    });
+  }
+
+  setWidth() {
+    this.tasks.forEach((t) => {
+      for (let i = 0; i < this.tasks.length; i++) {
+        if (t.end > this.tasks[i].start && t.start < this.tasks[i].start) {
+          t.width = 100;
+          this.tasks[i].width = 100;
+          t.title = t.title.slice(0, 10) + '...';
+          if (t.left === 40 && this.tasks[i - 1].left != 140) {
+            this.tasks[i].left = 140;
+          }
+        }
+      }
+    });
+  }
+  //вирівнювання суміжних задач трохи відхиляється від макету, але так логічніше і більш юзер-френдлі, що перша задача буде лівіше, а наступна правіше
+
+
+}
+
+let myTaskList = new TaskList(tasks);
+console.log(myTaskList);
+
+// class RenderTasks {
+//   constructor(myTaskList) {}
+// }
+// const renderTasks = new RenderTasks(myTaskList);
+
+function renderTasks(arr, placement) {
+  arr.map((task) => {
+    const taskEl = document.createElement('div');
+    taskEl.classList.add('task');
+    placement.append(taskEl);
+
+    const taskTitle = document.createElement('p');
+    taskEl.append(taskTitle);
+    taskTitle.textContent = task.title;
+
+    taskEl.setAttribute(
+      'style',
+      `height: ${task.duration * 2}px; width: ${task.width}px; top: ${
+        task.top
+      }px; left: ${task.left}px;`
+    );
+  });
+}
 
 let morningTaskList = [];
-for (const task of tasks) {
+for (const task of myTaskList.tasks) {
   if (Number(task.start) < 300) morningTaskList.push(task);
 }
-console.log(morningTaskList);
 
 let afternoonTaskList = [];
-for (const task of tasks) {
+for (const task of myTaskList.tasks) {
   if (Number(task.start) >= 300) afternoonTaskList.push(task);
 }
 console.log(morningTaskList);
 console.log(afternoonTaskList);
 
-function renderMorningTasks() {
-  morningTaskList.map((task) => {
-    const taskEl = document.createElement('div');
-    taskEl.classList.add('task');
-    morningTasks.append(taskEl);
+renderTasks(morningTaskList, morningTasks);
+renderTasks(afternoonTaskList, afternoonTasks);
 
-    const taskTitle = document.createElement('p');
-    taskEl.append(taskTitle);
-    taskTitle.textContent = task.title;
+// let id = 1;
 
-    taskEl.setAttribute(
-      'style',
-      `height: ${task.duration * 2}px; width: ${task.width}px; top: ${
-        task.start * 2
-      }px; left: ${task.left}px;`
-    );
-    return taskEl;
-  });
-}
+// const taskList = tasks.map((task) => {
+//   task.end = task.start + task.duration;
+//   task.left = 40;
+//   task.width = 200;
+//   task.id = id++;
+//   return task;
+// });
 
-renderMorningTasks();
+// console.log(taskList);
 
-function renderAfternoonTasks() {
-  afternoonTaskList.map((task) => {
-    const taskEl = document.createElement('div');
-    taskEl.classList.add('task');
-    afternoonTasks.append(taskEl);
+// function renderTasks(arr, placement) {
+//   arr.map((task) => {
+//     const taskEl = document.createElement('div');
+//     taskEl.classList.add('task');
+//     placement.append(taskEl);
 
-    const taskTitle = document.createElement('p');
-    taskEl.append(taskTitle);
-    taskTitle.textContent = task.title;
+//     const taskTitle = document.createElement('p');
+//     taskEl.append(taskTitle);
+//     taskTitle.textContent = task.title;
 
-    taskEl.setAttribute(
-      'style',
-      `height: ${task.duration * 2}px; width: ${task.width}px; top: ${
-        task.start * 2 - 600
-      }px; left: ${task.left}px;`
-    );
-    return taskEl;
-  });
-}
+//     if (Number(task.start) < 300)
+//       taskEl.setAttribute(
+//         'style',
+//         `height: ${task.duration * 2}px; width: ${task.width}px; top: ${
+//           task.start * 2
+//         }px; left: ${task.left}px;`
+//       );
+//     else
+//       taskEl.setAttribute(
+//         'style',
+//         `height: ${task.duration * 2}px; width: ${task.width}px; top: ${
+//           (Number(task.start) - 300) * 2
+//         }px; left: ${task.left}px;`
+//       );
 
-renderAfternoonTasks();
+//     for (let i = 0; i < arr.length; i++) {
+//       if (
+//         Number(task.end) > Number(arr[i].start) &&
+//         Number(task.start) < Number(arr[i].start)
+//       )
+//         console.log(arr[i]);
+
+//     }
+//   });
+// }
+
+// let morningTaskList = [];
+// for (const task of tasks) {
+//   if (Number(task.start) < 300) morningTaskList.push(task);
+// }
+// console.log(morningTaskList);
+
+// let afternoonTaskList = [];
+// for (const task of tasks) {
+//   if (Number(task.start) >= 300) afternoonTaskList.push(task);
+// }
+// console.log(morningTaskList);
+// console.log(afternoonTaskList);
+
+// renderTasks(morningTaskList, morningTasks);
+// renderTasks(afternoonTaskList, afternoonTasks);
