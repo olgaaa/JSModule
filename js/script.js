@@ -125,8 +125,6 @@ class TaskList {
     });
   }
   //вирівнювання суміжних задач трохи відхиляється від макету, але так логічніше і більш юзер-френдлі, що перша задача буде лівіше, а наступна правіше
-
-
 }
 
 let myTaskList = new TaskList(tasks);
@@ -147,6 +145,11 @@ function renderTasks(arr, placement) {
     taskEl.append(taskTitle);
     taskTitle.textContent = task.title;
 
+    taskEl.insertAdjacentHTML(
+      'afterbegin',
+      '<button class="remove-button">✕</button>'
+    );
+
     taskEl.setAttribute(
       'style',
       `height: ${task.duration * 2}px; width: ${task.width}px; top: ${
@@ -155,6 +158,12 @@ function renderTasks(arr, placement) {
     );
   });
 }
+
+document.addEventListener('click', (e) => {
+  if (e.target.className == 'remove-button') {
+    e.target.parentElement.remove();
+  }
+});
 
 let morningTaskList = [];
 for (const task of myTaskList.tasks) {

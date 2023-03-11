@@ -192,3 +192,19 @@ li {
 .task:hover {
   background-color: #c5def6;
 }
+
+.remove-button {
+  cursor: pointer;
+  color: #e2ecf5;
+  float: right;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 12px;
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+  z-index: 100;
+}
+
+.remove-button:hover {
+  color: white;
+}
