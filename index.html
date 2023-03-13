@@ -13,8 +13,36 @@
 </head>
 
 <body>
+
     <h1>Task planner</h1>
+    <a class="add-new-task" href="#open">Add new task</a>
+    <div id="modal" class="modal bounceIn">
+        <div id="close_modal">+</div>
+        <div class="modal_inputs">
+
+            <form class="form">
+                <div class="form-field">
+                    <label for="event-name"> Task to do: </label>
+                    <input id="event-name" type="text" name="appt-time" />
+                </div>
+
+                <div class="form-field">
+                    <label for="start-time"> Start task at (08:00 - 17:00): </label>
+                    <input id="start-time" type="time" />
+
+                </div>
+                <div class="form-field">
+                    <label for="end-time"> Finish task at (08:00 - 17:00): </label>
+                    <input id="end-time" type="time" />
+
+                </div>
+
+                <input class="submit-task" id="submit-btn" type="submit" value="Add new Task" />
+            </form>
+        </div>
+    </div>
     <div class="container">
+
         <div class="timeslots" id="morningTasks">
             <ul id="morningTimeSlots">
             </ul>
@@ -24,6 +52,8 @@
             </ul>
         </div>
     </div>
+
+
 
     <script src="js/script.js"></script>
 </body>

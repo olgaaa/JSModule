@@ -122,6 +122,11 @@ class TaskList {
           }
         }
       }
+      document.addEventListener('click', (e) => {
+        if (e.target.className == 'remove-button') {
+          e.target.parentElement.remove();
+        }
+      });
     });
   }
   //вирівнювання суміжних задач трохи відхиляється від макету, але так логічніше і більш юзер-френдлі, що перша задача буде лівіше, а наступна правіше
@@ -159,11 +164,57 @@ function renderTasks(arr, placement) {
   });
 }
 
-document.addEventListener('click', (e) => {
-  if (e.target.className == 'remove-button') {
-    e.target.parentElement.remove();
+let open_modal = document.querySelectorAll('.add-new-task');
+let close_modal = document.getElementById('close_modal');
+let modal = document.getElementById('modal');
+let body = document.getElementsByTagName('body')[0];
+for (let i = 0; i < open_modal.length; i++) {
+  open_modal[i].onclick = function () {
+    // клик на открытие
+    modal.classList.add('modal_vis'); // добавляем видимость окна
+    modal.classList.remove('bounceOutDown'); // удаляем эффект закрытия
+    body.classList.add('body_block'); // убираем прокрутку
+  };
+}
+close_modal.onclick = function () {
+  modal.classList.add('bounceOutDown');
+  window.setTimeout(function () {
+    modal.classList.remove('modal_vis');
+    body.classList.remove('body_block');
+  }, 500);
+};
+
+const startInput = document.querySelector('#start-time');
+const endInput = document.querySelector('#end-time');
+const nameInput = document.querySelector('#event-name');
+const submitBtn = document.querySelector('#submit-btn');
+
+function convertTime(str) {
+  const arr = str.split(':');
+  const hours = Number(arr[0]) - 8;
+  const minutes = Number(arr[1]);
+  const totalMinutes = hours * 60 + minutes;
+  return totalMinutes;
+}
+
+submitBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  if (convertTime(startInput.value) < 0 || convertTime(endInput.value) > 540) {
+    return;
   }
+  const start = convertTime(startInput.value);
+  const duration = convertTime(endInput.value) - convertTime(startInput.value);
+  const title = nameInput.value;
+  tasks.addEvent({ start, duration, title });
 });
+
+submitBtn.onclick = function () {
+  modal.classList.add('bounceOutDown');
+  window.setTimeout(function () {
+    modal.classList.remove('modal_vis');
+    body.classList.remove('body_block');
+  }, 500);
+};
 
 let morningTaskList = [];
 for (const task of myTaskList.tasks) {
